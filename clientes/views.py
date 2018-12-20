@@ -29,9 +29,9 @@ def person_update(request, id):
 
     if form.is_valid():
         form.save()
-        return redirect('person_list')
+        return redirect('person_list') #depois de salvar, redireciona para person_list
 
-    return render(request, 'person_form.html', {'form': form})
+    return render(request, 'dados_clientes.html', {'form': form}) #aqui são as páginas html de cada função
 
 
 @login_required()
