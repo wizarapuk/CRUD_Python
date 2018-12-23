@@ -8,7 +8,14 @@ from .forms import PersonForm
 
 @login_required
 def person_list(request):
-    pessoas = Person.objects.all()
+    nome = request.GET.get('pesquisa', None)
+    sobrenome = request.GET.get('pesquisa', None)
+
+    if nome or sobrenome:                           #icontains ignora letras maiusculas ou minusculas
+        pessoas = Person.objects.filter(first_name__icontains=nome) | Person.objects.filter(last_name__icontains=sobrenome)   #campo de busca pegando pelo primeiro nome ou o ultimo
+    else:
+        pessoas = Person.objects.all()
+
     return render(request, 'person.html', {'pessoas': pessoas})
 
 
@@ -29,9 +36,9 @@ def person_update(request, id):
 
     if form.is_valid():
         form.save()
-        return redirect('person_list') #depois de salvar, redireciona para person_list
+        return redirect('person_list')  #depois de salvar, redireciona para person_list
 
-    return render(request, 'dados_clientes.html', {'form': form}) #aqui são as páginas html de cada função
+    return render(request, 'dados_clientes.html', {'form': form})  #aqui são as páginas html de cada função
 
 
 @login_required()
